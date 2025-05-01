@@ -2,7 +2,7 @@
 
 Canvas Studio is a modern, feature-rich drawing application built with React and TypeScript. It provides an intuitive interface for digital sketching with multiple tools, color options, and multi-page support.
 
-![Demo Screenshot](./public/readme.png)
+![Front Page](./public/readme.png)
 
 ## ✨ Features
 
@@ -20,8 +20,15 @@ Canvas Studio is a modern, feature-rich drawing application built with React and
 - 💾 Export drawings as PNG
 - 📱 Responsive design for desktop and mobile
 
-![Drawing Tools Demo]
-<!-- Add a GIF or image showing the drawing tools in action -->
+## 📚 What I Learned
+
+During this project, I explored and learned:
+
+- 🧩 How to use **react-color** for implementing a customizable color picker.
+- 🖍️ How to utilize **react-draw-canvas** to build the actual drawing canvas.
+- 🖼️ Deeper understanding of the HTML5 **Canvas API** for advanced drawing features.
+- 🔄 Efficient state management for multi-page canvas handling and undo logic.
+- 💡 Improved React & TypeScript project structuring and component reusability.
 
 ## 🚀 Getting Started
 
@@ -34,5 +41,5 @@ Canvas Studio is a modern, feature-rich drawing application built with React and
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/canvas-studio.git
-   cd canvas-studio
+   git clone https://github.com/Pratham2703005/Canvas-studio
+   cd Canvas-studio
