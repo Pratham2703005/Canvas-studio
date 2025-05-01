@@ -1,7 +1,6 @@
 import React from "react"
 import { useRef, useState, useEffect } from "react"
 
-
 export default function CanvasArea({ values, currentPage, pages, history, setHistory }) {
   const canvasRef = useRef(null)
   const [isDrawing, setIsDrawing] = useState(false)
@@ -69,15 +68,35 @@ export default function CanvasArea({ values, currentPage, pages, history, setHis
     }
   }, [history])
 
-  // Mouse handling functions
+  // Get coordinates for both mouse and touch events
+  const getCoordinates = (e, canvas) => {
+    const rect = canvas.getBoundingClientRect()
+    let x, y
+    
+    // Check if it's a touch event
+    if (e.touches && e.touches.length > 0) {
+      x = e.touches[0].clientX - rect.left
+      y = e.touches[0].clientY - rect.top
+    } else {
+      // Mouse event
+      x = e.clientX - rect.left
+      y = e.clientY - rect.top
+    }
+    
+    return { x, y }
+  }
+
+  // Start drawing - works for both mouse and touch
   const startDrawing = (e) => {
     if (canvasRef.current) {
       const canvas = canvasRef.current
       const ctx = canvas.getContext("2d")
       if (ctx) {
-        const rect = canvas.getBoundingClientRect()
-        const x = e.clientX - rect.left
-        const y = e.clientY - rect.top
+        // Prevent scrolling when drawing on mobile
+        e.preventDefault()
+        
+        const coords = getCoordinates(e, canvas)
+        const { x, y } = coords
 
         setIsDrawing(true)
 
@@ -102,15 +121,18 @@ export default function CanvasArea({ values, currentPage, pages, history, setHis
     }
   }
 
+  // Draw - works for both mouse and touch
   const draw = (e) => {
     if (!isDrawing || !canvasRef.current) return
 
     const canvas = canvasRef.current
     const ctx = canvas.getContext("2d")
     if (ctx) {
-      const rect = canvas.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
+      // Prevent scrolling when drawing on mobile
+      e.preventDefault()
+      
+      const coords = getCoordinates(e, canvas)
+      const { x, y } = coords
 
       // Add point to current path
       setCurrentPath((prev) => ({
@@ -139,8 +161,14 @@ export default function CanvasArea({ values, currentPage, pages, history, setHis
     }
   }
 
-  const stopDrawing = () => {
+  // Stop drawing - works for both mouse and touch
+  const stopDrawing = (e) => {
     if (isDrawing && canvasRef.current) {
+      // Prevent default behavior on mobile
+      if (e && e.preventDefault) {
+        e.preventDefault()
+      }
+      
       setIsDrawing(false)
 
       const canvas = canvasRef.current
@@ -252,10 +280,16 @@ export default function CanvasArea({ values, currentPage, pages, history, setHis
         ref={canvasRef}
         width={800}
         height={500}
+        // Mouse events
         onMouseDown={startDrawing}
         onMouseMove={draw}
         onMouseUp={stopDrawing}
         onMouseLeave={stopDrawing}
+        // Touch events
+        onTouchStart={startDrawing}
+        onTouchMove={draw}
+        onTouchEnd={stopDrawing}
+        onTouchCancel={stopDrawing}
         className="w-full h-auto bg-white border border-slate-200 rounded shadow-sm"
         style={{ maxWidth: "100%", touchAction: "none" }}
       />
